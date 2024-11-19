@@ -60,4 +60,11 @@ public interface DishMapper {
      * @param dishIds
      */
     void deleteByIds(List<Long> dishIds);
+
+    /**
+     * 根据id动态修改菜品数据
+     * @param dish
+     */
+    @AutoFill(OperationType.UPDATE)
+    void update(Dish dish);
 }
