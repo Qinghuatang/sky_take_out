@@ -65,6 +65,7 @@ public class DishServiceImpl implements DishService {
 
     /**
      * 菜品分页查询
+     *
      * @param dishPageQueryDTO
      * @return
      */
@@ -77,6 +78,7 @@ public class DishServiceImpl implements DishService {
 
     /**
      * 菜品批量删除
+     *
      * @param ids
      */
     @Override
@@ -85,7 +87,7 @@ public class DishServiceImpl implements DishService {
         // 判断当前菜品是否能够删除(是否存在起售中的菜品)
         for (Long id : ids) {
             Dish dish = dishMapper.getById(id);
-            if(dish.getStatus() == StatusConstant.ENABLE){
+            if (dish.getStatus() == StatusConstant.ENABLE) {
                 // 当前菜品处于起售中，不能删除
                 throw new DeletionNotAllowedException(MessageConstant.DISH_ON_SALE);
             }
@@ -93,7 +95,7 @@ public class DishServiceImpl implements DishService {
 
         // 判断当前菜品是否能够删除(是否被套餐关联了)
         List<Long> setmealIds = setmealDishMapper.getSetmealIdsByDishIds(ids);
-        if(setmealIds != null && setmealIds.size() > 0){
+        if (setmealIds != null && setmealIds.size() > 0) {
             // 当前菜品被套餐关联，不能删除
             throw new DeletionNotAllowedException(MessageConstant.DISH_BE_RELATED_BY_SETMEAL);
         }
@@ -114,6 +116,7 @@ public class DishServiceImpl implements DishService {
 
     /**
      * 根据id查询菜品和对应的口味数据
+     *
      * @param id
      * @return
      */
@@ -154,5 +157,21 @@ public class DishServiceImpl implements DishService {
             // 向口味表插入n条数据
             dishFlavorMapper.insertBatch(flavors);
         }
+    }
+
+    /**
+     * 根据分类id查询菜品
+     *
+     * @param categoryId
+     * @return
+     */
+    @Override
+    public List<Dish> list(Long categoryId) {
+        Dish dish = Dish.builder()
+                .categoryId(categoryId)
+                .status(StatusConstant.ENABLE)
+                .build();
+
+        return dishMapper.list(dish);
     }
 }
