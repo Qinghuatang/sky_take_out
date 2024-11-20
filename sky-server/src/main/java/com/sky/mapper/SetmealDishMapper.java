@@ -22,4 +22,10 @@ public interface SetmealDishMapper {
      * @param setmealDishes
      */
     void insertBatch(List<SetmealDish> setmealDishes);
+
+    /**
+     * 根据套餐id集合批量删除套餐和菜品的关联关系
+     * @param setmealIds
+     */
+    void deleteByIds(List<Long> setmealIds);
 }
